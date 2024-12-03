@@ -1,5 +1,7 @@
 ﻿using MetaCortex.Customers.DataAccess.Entities;
 using MetaCortex.Customers.DataAccess.Interfaces;
+using MetaCortex.Customers.DataAccess.MessageBroker;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MetaCortex.Customers.API.Extensions;
 
@@ -19,8 +21,9 @@ public static class CustomerEndpoints
         return app;
     }
 
-    public static async Task<IResult> GetAllCustomersAsync(ICustomerRepository repo)
+    public static async Task<IResult> GetAllCustomersAsync(ICustomerRepository repo, IMessageProducerService msg)
     {
+        await msg.SendMessageAsync("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         var customers = await repo.GetAllAsync();
         if(!customers.Any())
         {
