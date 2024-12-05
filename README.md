@@ -1,4 +1,17 @@
-# Customer API Documentation
+# Group Project: Microservices
+
+This repository is part of a group project where we are developing a distributed application composed of several microservices. Each team member is responsible for a specific part of the system:
+
+- MetaCortex.Customers - Maintained by me, responsible for customer management (this repository).
+- [MetaCortex.Orders](https://github.com/anders0b/MetaCortex.Orders) - Maintained by [Anders0b](https://github.com/anders0b), responsible for order management.
+- [MetaCortex.Products](https://github.com/GabrielRai/MetaCortex.Products) - Maintained by [GabrielRai](https://github.com/GabrielRai), responsible for product information.
+- [MetaCortex.Payments](https://github.com/Heimbrand/MetaCortex.Payments) - Maintained by [Heimbrand](https://github.com/Heimbrand), responsible for handling payments.
+
+Together, these microservices, as well as an API-Gateway, form a complete system where each service has a clear role and responsibility.
+
+---
+
+## Customer API Documentation
 
 ## Overview
 The Customer API provides endpoints to manage customer resources. Below is a detailed guide to each endpoint, including request and response details.
