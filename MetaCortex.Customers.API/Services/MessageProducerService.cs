@@ -5,8 +5,11 @@ using RabbitMQ.Client;
 
 namespace MetaCortex.Customers.API.Services;
 
-public class MessageProducerService(RabbitMqConfiguration config) : IMessageProducerService
+public class MessageProducerService(RabbitMqConfiguration config)
+    : IMessageProducerService
 {
+    //private const string QueueName = "customer-to-order";
+
     private readonly ConnectionFactory _connection = new()
     {
         HostName = config.HostName,
@@ -15,11 +18,11 @@ public class MessageProducerService(RabbitMqConfiguration config) : IMessageProd
         VirtualHost = "/"
     };
 
-    public async Task SendMessageAsync<T>(T message)
+    public async Task SendMessageAsync<T>(T message, string queueName)
     {
         await using var connection = await _connection.CreateConnectionAsync();
         await using var channel = await connection.CreateChannelAsync();
-        await channel.QueueDeclareAsync(queue: "customer",
+        await channel.QueueDeclareAsync(queue: queueName,
             durable: false,
             exclusive: false,
             autoDelete: false,
@@ -29,7 +32,7 @@ public class MessageProducerService(RabbitMqConfiguration config) : IMessageProd
         var body = Encoding.UTF8.GetBytes(jsonString);
 
         await channel.BasicPublishAsync(exchange: "",
-            routingKey: "customer",
+            routingKey: queueName,
             body: body);
     }
 }

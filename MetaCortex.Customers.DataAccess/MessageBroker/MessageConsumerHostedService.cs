@@ -6,6 +6,7 @@ public class MessageConsumerHostedService(IMessageConsumerService service) : Bac
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        Console.WriteLine($"Message consumer service is running.");
         await service.ReadMessageAsync();
     }
 }

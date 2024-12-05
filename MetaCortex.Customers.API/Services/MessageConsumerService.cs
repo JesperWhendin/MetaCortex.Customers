@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using MetaCortex.Customers.API.Interfaces;
 using MetaCortex.Customers.DataAccess.MessageBroker;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
@@ -8,30 +9,28 @@ namespace MetaCortex.Customers.API.Services;
 
 public class MessageConsumerService : IMessageConsumerService
 {
-    private readonly RabbitMqConfiguration _rabbitMqConfiguration;
-    private readonly IConnection _connection;
     private readonly IChannel _channel;
-    public MessageConsumerService(RabbitMqConfiguration rabbitMqConfiguration)
-    {
-        _rabbitMqConfiguration = rabbitMqConfiguration;
-        var factory = new ConnectionFactory
-        {
-            HostName = _rabbitMqConfiguration.HostName,
-            UserName = _rabbitMqConfiguration.UserName,
-            Password = _rabbitMqConfiguration.Password
-        };
 
-        _connection = factory.CreateConnectionAsync().GetAwaiter().GetResult();
-        _channel = _connection.CreateChannelAsync().GetAwaiter().GetResult();
-    }
-    public async Task ReadMessageAsync()
+    private const string QueueName = "order-to-customer";
+
+    private readonly ICheckCustomerStatusService _checkCustomerStatusService;
+
+    public MessageConsumerService(IRabbitMqService rabbitMqService, ICheckCustomerStatusService checkCustomerStatusService)
     {
-        await _channel.QueueDeclareAsync(queue: "customer",
+        var connection = rabbitMqService.CreateConnection().Result;
+        _channel = connection.CreateChannelAsync().Result;
+        _channel.QueueDeclareAsync(
+            queue: QueueName,
             durable: false,
             exclusive: false,
             autoDelete: false,
-            arguments: null);
+            arguments: null
+        ).Wait();
+        _checkCustomerStatusService = checkCustomerStatusService;
+    }
 
+    public async Task ReadMessageAsync()
+    {
         var consumer = new AsyncEventingBasicConsumer(_channel);
 
         consumer.ReceivedAsync += async (model, e) =>
@@ -39,9 +38,10 @@ public class MessageConsumerService : IMessageConsumerService
             var body = e.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
             Console.WriteLine(" [x] Received {0}", message);
+            await _checkCustomerStatusService.CheckCustomerStatusAsync(message);
         };
 
-        await _channel.BasicConsumeAsync(queue: "customer",
+        await _channel.BasicConsumeAsync(queue: QueueName,
             autoAck: true,
             consumer: consumer);
 

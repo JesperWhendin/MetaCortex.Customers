@@ -2,6 +2,7 @@
 using MetaCortex.Customers.DataAccess.Interfaces;
 using MetaCortex.Customers.DataAccess.MessageBroker;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 
 namespace MetaCortex.Customers.API.Extensions;
 
@@ -23,12 +24,16 @@ public static class CustomerEndpoints
 
     public static async Task<IResult> GetAllCustomersAsync(ICustomerRepository repo, IMessageProducerService msg)
     {
-        await msg.SendMessageAsync("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         var customers = await repo.GetAllAsync();
-        if(!customers.Any())
+        if (!customers.Any())
         {
             return Results.NotFound();
         }
+        
+        //foreach (var customer in customers)
+        //{
+        //    await msg.SendMessageAsync(customer, "test-queue");
+        //}
         return Results.Ok(customers);
     }
 
@@ -52,7 +57,7 @@ public static class CustomerEndpoints
         return Results.Ok(customer);
     }
 
-    public static async Task<IResult> AddCustomerAsync(ICustomerRepository repo, Customer customer)
+    public static async Task<IResult> AddCustomerAsync(ICustomerRepository repo, IMessageProducerService msg, Customer customer)
     {
         await repo.AddAsync(customer);
         return Results.Created($"/api/customer/{customer.Id}", customer);
