@@ -40,7 +40,7 @@ builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
 builder.Services.AddSingleton<IMessageProducerService, MessageProducerService>();
 builder.Services.AddSingleton<IMessageConsumerService, MessageConsumerService>();
 
-builder.Services.AddSingleton<CheckCustomerStatusService>();
+builder.Services.AddSingleton<ICheckCustomerStatusService, CheckCustomerStatusService>();
 
 builder.Services.AddHostedService<MessageConsumerHostedService>();
 

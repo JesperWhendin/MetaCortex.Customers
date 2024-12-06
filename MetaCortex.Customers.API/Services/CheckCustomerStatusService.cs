@@ -1,12 +1,12 @@
 ﻿using System.Text.Json;
 using MetaCortex.Customers.API.DTOs;
 using MetaCortex.Customers.API.Interfaces;
+using MetaCortex.Customers.DataAccess.Interfaces;
 using MetaCortex.Customers.DataAccess.MessageBroker;
-using MetaCortex.Customers.DataAccess.Repositories;
 
 namespace MetaCortex.Customers.API.Services;
 
-public class CheckCustomerStatusService(CustomerRepository repo, IMessageProducerService msg)
+public class CheckCustomerStatusService(ICustomerRepository repo, IMessageProducerService msg)
     : ICheckCustomerStatusService
 {
     private const string queueName = "customer-to-order";

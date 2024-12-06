@@ -10,7 +10,7 @@ public static class CustomerEndpoints
 {
     public static IEndpointRouteBuilder MapCustomerEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("api/customer");
+        var group = app.MapGroup("api/customers");
 
         group.MapGet("", GetAllCustomersAsync);
         group.MapGet("id/{id}", GetCustomerByIdAsync);

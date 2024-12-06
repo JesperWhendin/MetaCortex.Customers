@@ -5,5 +5,7 @@
         public string Name { get; set; } = default!;
         public string Email { get; set; } = default!;
         public bool IsVIP { get; set; }
+
+        // public bool AllowNotifications { get; set; }
     }
 }
