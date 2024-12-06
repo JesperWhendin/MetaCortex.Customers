@@ -4,10 +4,14 @@ This repository is part of a group project where we are developing a distributed
 
 - MetaCortex.Customers - Maintained by me, responsible for customer management (this repository).
 - [MetaCortex.Orders](https://github.com/anders0b/MetaCortex.Orders) - Maintained by [Anders0b](https://github.com/anders0b), responsible for order management.
-- [MetaCortex.Products](https://github.com/GabrielRai/MetaCortex.Products) - Maintained by [GabrielRai](https://github.com/GabrielRai), responsible for product information.
 - [MetaCortex.Payments](https://github.com/Heimbrand/MetaCortex.Payments) - Maintained by [Heimbrand](https://github.com/Heimbrand), responsible for handling payments.
+- [MetaCortex.Products](https://github.com/GabrielRai/MetaCortex.Products) - Maintained by [GabrielRai](https://github.com/GabrielRai), responsible for product information.
 
 Together, these microservices, as well as an API-Gateway, form a complete system where each service has a clear role and responsibility.
+
+- [MetaCortex.Full.Development](https://github.com/GabrielRai/MetaCortex.Full.Development)
+   - The complete repository where everything is integrated into one solution.
+   - Used for visualization and testing purposes.
 
 ---
 
