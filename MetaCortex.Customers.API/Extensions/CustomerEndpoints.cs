@@ -15,6 +15,7 @@ public static class CustomerEndpoints
         group.MapGet("", GetAllCustomersAsync);
         group.MapGet("id/{id}", GetCustomerByIdAsync);
         group.MapGet("email/{email}", GetCustomerByEmailAsync);
+        group.MapGet("notifications", GetByAllowNotificationsAsync);
         group.MapPost("", AddCustomerAsync);
         group.MapPut("", UpdateCustomerAsync);
         group.MapDelete("{id}", DeleteCustomerAsync);
@@ -55,6 +56,15 @@ public static class CustomerEndpoints
             return Results.NotFound();
         }
         return Results.Ok(customer);
+    }
+
+    public static async Task<IResult> GetByAllowNotificationsAsync(ICustomerRepository repo)
+    {
+        var customers = await repo.GetByAllowNotificationsAsync();
+        if (!customers.Any())
+            return Results.NotFound();
+        
+        return Results.Ok(customers);
     }
 
     public static async Task<IResult> AddCustomerAsync(ICustomerRepository repo, IMessageProducerService msg, Customer customer)

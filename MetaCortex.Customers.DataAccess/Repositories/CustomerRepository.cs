@@ -17,7 +17,12 @@ public class CustomerRepository : Repository<Customer, string>, ICustomerReposit
 
     public async Task<Customer> GetByEmailAsync(string email)
     {
-        return await _collection.Find(e => e.Email == email).FirstOrDefaultAsync();
+        return await _collection.Find(customer => customer.Email == email).FirstOrDefaultAsync();
+    }
+
+    public async Task<IEnumerable<Customer>> GetByAllowNotificationsAsync()
+    {
+        return await _collection.Find(customer => customer.AllowNotifications == true).ToListAsync();
     }
 
     public async Task UpdateAsync(Customer customer)
