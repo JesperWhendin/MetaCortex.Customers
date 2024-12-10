@@ -5,6 +5,7 @@ WORKDIR /App
 COPY ./MetaCortex.Customers.sln ./
 
 COPY ./MetaCortex.Customers.API/MetaCortex.Customers.API.csproj ./MetaCortex.Customers.API/
+COPY ./MetaCortex.Customers.DataAccess/MetaCortex.Customers.DataAccess.csproj ./MetaCortex.Customers.DataAccess/
 RUN dotnet restore MetaCortex.Customers.sln
 
 COPY ./ ./
