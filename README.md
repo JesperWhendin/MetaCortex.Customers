@@ -65,7 +65,7 @@ Retrieve all customers from the database.
 ---
 
 ### 2. Get Customer by ID
-**GET** `/id/{id}`
+**GET** `/{id}`
 
 Retrieve a customer by their unique ID.
 
