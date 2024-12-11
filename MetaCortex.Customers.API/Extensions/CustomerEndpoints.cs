@@ -13,8 +13,8 @@ public static class CustomerEndpoints
         var group = app.MapGroup("api/customers");
 
         group.MapGet("", GetAllCustomersAsync);
-        group.MapGet("id/{id}", GetCustomerByIdAsync);
-        group.MapGet("email/{email}", GetCustomerByEmailAsync);
+        group.MapGet("{id}", GetCustomerByIdAsync);
+        group.MapGet("{email}", GetCustomerByEmailAsync);
         group.MapGet("notifications", GetByAllowNotificationsAsync);
         group.MapPost("", AddCustomerAsync);
         group.MapPut("", UpdateCustomerAsync);
