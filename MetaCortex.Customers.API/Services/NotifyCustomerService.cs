@@ -22,11 +22,7 @@ public class NotifyCustomerService(ICustomerRepository repo, ILogger<NotifyCusto
             logger.LogInformation("No customers that allow notifications found.");
 
         if (customers is not null)
-        {
-            foreach (var customer in customers)
-            {
-                logger.LogInformation($"logger.LogInformation: Nu finns {productDto.Name} i sortimentet.");
-            }
-        }
+            logger.LogInformation($"logger.LogInformation: Notifying {customers.Count()} customers about {productDto.Name} that is new in stock. Only {productDto.Price} for a limited time only.");
+
     }
 }
