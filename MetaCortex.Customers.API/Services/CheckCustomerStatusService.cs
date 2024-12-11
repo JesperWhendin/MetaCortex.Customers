@@ -6,25 +6,26 @@ using MetaCortex.Customers.DataAccess.MessageBroker;
 
 namespace MetaCortex.Customers.API.Services;
 
-public class CheckCustomerStatusService(ICustomerRepository repo, IMessageProducerService msg)
+public class CheckCustomerStatusService(ICustomerRepository repo, IMessageProducerService msg, ILogger<CheckCustomerStatusService> logger)
     : ICheckCustomerStatusService
 {
     private const string queueName = "customer-to-order";
 
     public async Task CheckCustomerStatusAsync(string order)
     {
+        logger.LogInformation("Order received.");
         var orderDto = JsonSerializer.Deserialize<OrderDto>(order);
 
-        //if (orderDto.CustomerId is null)
-        //    throw new SystemException("Invalid customer id.");
+        if (orderDto.CustomerId is null)
+            throw new SystemException("Invalid customer id.");
 
+        logger.LogInformation($"Retrieving customer with id {orderDto.CustomerId}.");
+        var customer = await repo.GetByIdAsync(orderDto.CustomerId);
 
-        //var customer = await repo.GetByIdAsync(orderDto.CustomerId);
+        logger.LogInformation("Setting vip status for order equal to customer status.");
+        orderDto.VIPStatus = customer.IsVip;
 
-        orderDto.VIPStatus = true;
-
-        // TODO: log more of this and more of that
-
+        logger.LogInformation("Sending order to message broker.");
         await msg.SendMessageAsync(orderDto, queueName);
     }
 }

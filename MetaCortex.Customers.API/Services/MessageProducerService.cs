@@ -8,8 +8,6 @@ namespace MetaCortex.Customers.API.Services;
 public class MessageProducerService(RabbitMqConfiguration config)
     : IMessageProducerService
 {
-    //private const string QueueName = "customer-to-order";
-
     private readonly ConnectionFactory _connection = new()
     {
         HostName = config.HostName,

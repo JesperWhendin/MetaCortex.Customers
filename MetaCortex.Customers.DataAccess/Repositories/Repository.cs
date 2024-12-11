@@ -27,8 +27,9 @@ public abstract class Repository<IEntity, TId>
         return await _collection.Find(e => e.Id.Equals(id)).FirstOrDefaultAsync();
     }
 
-    public async Task AddAsync(IEntity entity)
+    public async Task<IEntity> AddAsync(IEntity entity)
     {
         await _collection.InsertOneAsync(entity);
+        return entity;
     }
 }
