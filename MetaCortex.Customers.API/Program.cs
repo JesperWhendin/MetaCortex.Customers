@@ -41,6 +41,7 @@ builder.Services.AddSingleton<IMessageProducerService, MessageProducerService>()
 builder.Services.AddSingleton<IMessageConsumerService, MessageConsumerService>();
 
 builder.Services.AddSingleton<ICheckCustomerStatusService, CheckCustomerStatusService>();
+builder.Services.AddSingleton<INotifyCustomerService, NotifyCustomerService>();
 
 builder.Services.AddHostedService<MessageConsumerHostedService>();
 

@@ -22,6 +22,9 @@ public class CheckCustomerStatusService(ICustomerRepository repo, IMessageProduc
         //var customer = await repo.GetByIdAsync(orderDto.CustomerId);
 
         orderDto.VIPStatus = true;
+
+        // TODO: log more of this and more of that
+
         await msg.SendMessageAsync(orderDto, queueName);
     }
 }

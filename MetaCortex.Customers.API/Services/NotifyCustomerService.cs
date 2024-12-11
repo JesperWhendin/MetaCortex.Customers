@@ -22,7 +22,7 @@ public class NotifyCustomerService(ICustomerRepository repo, ILogger<NotifyCusto
 
         foreach (var customer in customers)
         {
-
+            // TODO: log this log that
             Console.WriteLine($"Console.WriteLine: Nu finns {productDto.Name} i sortimentet.");
             logger.LogInformation($"logger.LogInformation: Nu finns {productDto.Name} i sortimentet.");
         }

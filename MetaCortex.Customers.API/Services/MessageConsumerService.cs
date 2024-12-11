@@ -44,6 +44,8 @@ public class MessageConsumerService : IMessageConsumerService
             var body = e.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
             Console.WriteLine(" [x] Received {0}", message);
+
+            // TODO: log this log that
             _logger.LogInformation($"{message} - something");
 
             await _checkCustomerStatusService.CheckCustomerStatusAsync(message);
@@ -74,6 +76,8 @@ public class MessageConsumerService : IMessageConsumerService
             var body = e.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
             Console.WriteLine(" [x] Received {0}", message);
+
+            // TODO: log this log that
             _logger.LogInformation($"{message} - something");
 
             await _notifyCustomerService.NotifyCustomersAsync(message);
