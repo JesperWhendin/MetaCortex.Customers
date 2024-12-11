@@ -10,13 +10,15 @@ namespace MetaCortex.Customers.API.Services;
 public class MessageConsumerService : IMessageConsumerService
 {
     private readonly IChannel _channel;
+    private readonly ILogger<MessageConsumerService> _logger;
 
     private const string QueueName = "order-to-customer";
 
     private readonly ICheckCustomerStatusService _checkCustomerStatusService;
 
-    public MessageConsumerService(IRabbitMqService rabbitMqService, ICheckCustomerStatusService checkCustomerStatusService)
+    public MessageConsumerService(IRabbitMqService rabbitMqService, ICheckCustomerStatusService checkCustomerStatusService, ILogger<MessageConsumerService> logger)
     {
+        _logger = logger;
         var connection = rabbitMqService.CreateConnection().Result;
         _channel = connection.CreateChannelAsync().Result;
         _channel.QueueDeclareAsync(
@@ -38,6 +40,7 @@ public class MessageConsumerService : IMessageConsumerService
             var body = e.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
             Console.WriteLine(" [x] Received {0}", message);
+            _logger.LogInformation($"ETT SKEPP KOMMER LASTAT MED LITE DANK LOGS");
             await _checkCustomerStatusService.CheckCustomerStatusAsync(message);
         };
 
