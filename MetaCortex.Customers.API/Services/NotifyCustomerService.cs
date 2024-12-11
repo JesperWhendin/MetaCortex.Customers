@@ -6,10 +6,10 @@ using MetaCortex.Customers.DataAccess.MessageBroker;
 
 namespace MetaCortex.Customers.API.Services;
 
-public class NotifyCustomerService(ICustomerRepository repo, IMessageProducerService msg)
+public class NotifyCustomerService(ICustomerRepository repo, ILogger<NotifyCustomerService> logger)
     : INotifyCustomerService
 {
-    private const string queueName = "product-to-customer";
+    private const string queueName = "product-to-customer"; // Lär inte behövas nå jag inte skickar tillbaka något på c-t-p
 
     public async Task NotifyCustomersAsync(string product)
     {
@@ -18,16 +18,13 @@ public class NotifyCustomerService(ICustomerRepository repo, IMessageProducerSer
         if (productDto is null)
             throw new ArgumentNullException(nameof(productDto));
 
-        // Send info to existing customers about new available product via e.g. email
-
         var customers = await repo.GetByAllowNotificationsAsync();
 
         foreach (var customer in customers)
         {
-            //EmailService.SendEmailNotification(productDto);
-            Console.WriteLine($"Nu finns {productDto.Name} i sortimentet.");
+
+            Console.WriteLine($"Console.WriteLine: Nu finns {productDto.Name} i sortimentet.");
+            logger.LogInformation($"logger.LogInformation: Nu finns {productDto.Name} i sortimentet.");
         }
-        // Hur blir logiken för detta, ska msg.Send.. vara med?
-        // await msg.SendMessageAsync(productDto, queueName);
     }
 }

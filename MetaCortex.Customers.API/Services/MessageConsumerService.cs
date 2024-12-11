@@ -15,24 +15,28 @@ public class MessageConsumerService : IMessageConsumerService
     private const string QueueName = "order-to-customer";
 
     private readonly ICheckCustomerStatusService _checkCustomerStatusService;
+    private readonly INotifyCustomerService _notifyCustomerService;
 
-    public MessageConsumerService(IRabbitMqService rabbitMqService, ICheckCustomerStatusService checkCustomerStatusService, ILogger<MessageConsumerService> logger)
+    public MessageConsumerService(IRabbitMqService rabbitMqService, ICheckCustomerStatusService checkCustomerStatusService, INotifyCustomerService notifyCustomerService, ILogger<MessageConsumerService> logger)
     {
         _logger = logger;
         var connection = rabbitMqService.CreateConnection().Result;
         _channel = connection.CreateChannelAsync().Result;
+
+        _checkCustomerStatusService = checkCustomerStatusService;
+        _notifyCustomerService = notifyCustomerService;
+    }
+
+    public async Task ReadOrderAsync(string queueName)
+    {
         _channel.QueueDeclareAsync(
-            queue: QueueName,
+            queue: queueName,
             durable: false,
             exclusive: false,
             autoDelete: false,
             arguments: null
         ).Wait();
-        _checkCustomerStatusService = checkCustomerStatusService;
-    }
 
-    public async Task ReadMessageAsync()
-    {
         var consumer = new AsyncEventingBasicConsumer(_channel);
 
         consumer.ReceivedAsync += async (model, e) =>
@@ -40,11 +44,43 @@ public class MessageConsumerService : IMessageConsumerService
             var body = e.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
             Console.WriteLine(" [x] Received {0}", message);
-            _logger.LogInformation($"ETT SKEPP KOMMER LASTAT MED LITE DANK LOGS");
+            _logger.LogInformation($"{message} - something");
+
             await _checkCustomerStatusService.CheckCustomerStatusAsync(message);
+
         };
 
-        await _channel.BasicConsumeAsync(queue: QueueName,
+        await _channel.BasicConsumeAsync(queue: queueName,
+            autoAck: true,
+            consumer: consumer);
+
+        await Task.CompletedTask;
+    }
+
+    public async Task ReadNewProductAsync(string queueName)
+    {
+        _channel.QueueDeclareAsync(
+            queue: QueueName,
+            durable: false,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null
+        ).Wait();
+
+        var consumer = new AsyncEventingBasicConsumer(_channel);
+
+        consumer.ReceivedAsync += async (model, e) =>
+        {
+            var body = e.Body.ToArray();
+            var message = Encoding.UTF8.GetString(body);
+            Console.WriteLine(" [x] Received {0}", message);
+            _logger.LogInformation($"{message} - something");
+
+            await _notifyCustomerService.NotifyCustomersAsync(message);
+
+        };
+
+        await _channel.BasicConsumeAsync(queue: queueName,
             autoAck: true,
             consumer: consumer);
 
