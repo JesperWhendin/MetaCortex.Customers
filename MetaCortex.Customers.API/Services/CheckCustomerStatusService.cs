@@ -15,12 +15,13 @@ public class CheckCustomerStatusService(ICustomerRepository repo, IMessageProduc
     {
         var orderDto = JsonSerializer.Deserialize<OrderDto>(order);
 
-        if (orderDto.CustomerId is null)
-            throw new SystemException("Invalid customer id.");
+        //if (orderDto.CustomerId is null)
+        //    throw new SystemException("Invalid customer id.");
 
 
-        var customer = await repo.GetByIdAsync(orderDto.CustomerId);
-        orderDto.VIPStatus = customer.IsVip;
+        //var customer = await repo.GetByIdAsync(orderDto.CustomerId);
+
+        orderDto.VIPStatus = true;
         await msg.SendMessageAsync(orderDto, queueName);
     }
 }
