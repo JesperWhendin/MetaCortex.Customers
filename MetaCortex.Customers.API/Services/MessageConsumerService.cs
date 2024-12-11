@@ -27,7 +27,7 @@ public class MessageConsumerService : IMessageConsumerService
         _notifyCustomerService = notifyCustomerService;
     }
 
-    public async Task ReadOrderAsync(string queueName)
+    public async Task ReadMessageAsync(string queueName)
     {
         _channel.QueueDeclareAsync(
             queue: queueName,
@@ -48,7 +48,10 @@ public class MessageConsumerService : IMessageConsumerService
             // TODO: log this log that
             _logger.LogInformation($"{message} - something");
 
-            await _checkCustomerStatusService.CheckCustomerStatusAsync(message);
+            if(queueName == "order-to-customer")
+                await _checkCustomerStatusService.CheckCustomerStatusAsync(message);
+            if(queueName == "product-to-customer")
+                await _notifyCustomerService.NotifyCustomersAsync(message);
 
         };
 
@@ -59,35 +62,35 @@ public class MessageConsumerService : IMessageConsumerService
         await Task.CompletedTask;
     }
 
-    public async Task ReadNewProductAsync(string queueName)
-    {
-        _channel.QueueDeclareAsync(
-            queue: QueueName,
-            durable: false,
-            exclusive: false,
-            autoDelete: false,
-            arguments: null
-        ).Wait();
+    //public async Task ReadNewProductAsync(string queueName)
+    //{
+    //    _channel.QueueDeclareAsync(
+    //        queue: QueueName,
+    //        durable: false,
+    //        exclusive: false,
+    //        autoDelete: false,
+    //        arguments: null
+    //    ).Wait();
 
-        var consumer = new AsyncEventingBasicConsumer(_channel);
+    //    var consumer = new AsyncEventingBasicConsumer(_channel);
 
-        consumer.ReceivedAsync += async (model, e) =>
-        {
-            var body = e.Body.ToArray();
-            var message = Encoding.UTF8.GetString(body);
-            Console.WriteLine(" [x] Received {0}", message);
+    //    consumer.ReceivedAsync += async (model, e) =>
+    //    {
+    //        var body = e.Body.ToArray();
+    //        var message = Encoding.UTF8.GetString(body);
+    //        Console.WriteLine(" [x] Received {0}", message);
 
-            // TODO: log this log that
-            _logger.LogInformation($"{message} - something");
+    //        // TODO: log this log that
+    //        _logger.LogInformation($"{message} - something");
 
-            await _notifyCustomerService.NotifyCustomersAsync(message);
+    //        await _notifyCustomerService.NotifyCustomersAsync(message);
 
-        };
+    //    };
 
-        await _channel.BasicConsumeAsync(queue: queueName,
-            autoAck: true,
-            consumer: consumer);
+    //    await _channel.BasicConsumeAsync(queue: queueName,
+    //        autoAck: true,
+    //        consumer: consumer);
 
-        await Task.CompletedTask;
-    }
+    //    await Task.CompletedTask;
+    //}
 }
