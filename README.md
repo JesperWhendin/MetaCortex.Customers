@@ -10,7 +10,7 @@ This repository is part of a group project where we are developing a distributed
 
 Together, these microservices, as well as an API-Gateway, form a complete system where each service has a clear role and responsibility.
 
-- [MetaCortex.Full.Development](https://github.com/GabrielRai/MetaCortex.Full.Development)
+- [MetaCortex.Full.Development](https://github.com/GabrielRai/MetaCortex.Full.Development) - **Not up to date.**
    - The complete repository where everything is integrated into one solution.
    - Used for visualization and testing purposes.
 
