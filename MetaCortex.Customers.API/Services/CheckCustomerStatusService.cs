@@ -17,7 +17,12 @@ public class CheckCustomerStatusService(ICustomerRepository repo, IMessageProduc
         var orderDto = JsonSerializer.Deserialize<OrderDto>(order);
 
         if (orderDto.CustomerId is null)
-            throw new SystemException("Invalid customer id.");
+        {
+            logger.LogInformation("Customer id is null.");
+            await msg.SendMessageAsync(orderDto, queueName);
+            return;
+        }
+        //throw new SystemException("Invalid customer id.");
 
         logger.LogInformation($"Retrieving customer with id {orderDto.CustomerId}.");
         var customer = await repo.GetByIdAsync(orderDto.CustomerId);
