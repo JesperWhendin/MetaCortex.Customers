@@ -2,7 +2,7 @@
 
 This repository is part of a group project where we are developing a distributed application composed of several microservices. Each team member is collectively responsible for an API Gateway, aswell as individually responsible for a specific part of the system:
 
-- [MetaCortex.App](https://github.com/GabrielRai/MetaCortex.App) - Maintained by the whole group, contains the API Gateway.
+- [MetaCortex.Panther](https://github.com/anders0b/MetaCortex.Panther) - Maintained by the whole group, contains the API Gateway.
 - MetaCortex.Customers - Maintained by me, responsible for customer management (this repository).
 - [MetaCortex.Orders](https://github.com/anders0b/MetaCortex.Orders) - Maintained by [Anders0b](https://github.com/anders0b), responsible for order management.
 - [MetaCortex.Payments](https://github.com/Heimbrand/MetaCortex.Payments) - Maintained by [Heimbrand](https://github.com/Heimbrand), responsible for handling payments.
