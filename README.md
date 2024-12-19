@@ -133,7 +133,7 @@ Retrieve a list of customers with notifications allowed.
     "name": "John Doe",
     "email": "john.doe@example.com",
     "isvip": false,
-    "allownotifications": false
+    "allownotifications": true
   },
   {
     "id": "124",
